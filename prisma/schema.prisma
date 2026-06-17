@@ -1,0 +1,377 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  directUrl  = env("DIRECT_URL")
+}
+
+// ==========================================
+// 1. CATÁLOGOS GEOGRÁFICOS Y JERARQUÍA
+// ==========================================
+
+model TM_PAISE {
+  PAIS_COD Int     @id @default(autoincrement()) @map("pais_cod")
+  PAIS_NOM String  @unique @db.VarChar(40) @map("pais_nom")
+  TM_USUAR TM_USUAR[]
+
+  @@map("tm_paise")
+}
+
+model TM_REGION {
+  REGI_COD  Int         @id @default(autoincrement()) @map("regi_cod")
+  REGI_NOM  String      @unique @db.VarChar(100) @map("regi_nom")
+  TM_CORPO  TM_CORPO[]
+  TM_ESTADO TM_ESTADO[]
+  TR_USU_REGI TR_USU_REGI[]
+
+  @@map("tm_region")
+}
+
+model TM_CORPO {
+  CORP_COD Int         @id @default(autoincrement()) @map("corp_cod")
+  CORP_SIG String      @db.VarChar(20) @map("corp_sig")
+  CORP_NOM String      @db.VarChar(150) @map("corp_nom")
+  CORP_IMG String?     @db.VarChar(255) @map("corp_img")
+  CORP_REG Int         @map("corp_reg")
+  TM_REGION TM_REGION  @relation(fields: [CORP_REG], references: [REGI_COD], onDelete: Cascade, onUpdate: NoAction)
+
+  @@map("tm_corpo")
+}
+
+model TM_ESTADO {
+  ESTA_COD  Int        @id @default(autoincrement()) @map("esta_cod")
+  ESTA_NOM  String     @db.VarChar(100) @map("esta_nom")
+  ESTA_REGI Int        @map("esta_regi")
+  TM_REGION TM_REGION  @relation(fields: [ESTA_REGI], references: [REGI_COD], onDelete: Cascade, onUpdate: NoAction)
+  TM_MUNIC  TM_MUNIC[]
+
+  @@map("tm_estado")
+}
+
+model TM_MUNIC {
+  MUNI_COD  Int         @id @default(autoincrement()) @map("muni_cod")
+  MUNI_NOM  String      @db.VarChar(100) @map("muni_nom")
+  MUNI_EST  Int         @map("muni_est")
+  TM_ESTADO TM_ESTADO   @relation(fields: [MUNI_EST], references: [ESTA_COD], onDelete: Cascade, onUpdate: NoAction)
+  TM_PARRO  TM_PARRO[]
+  TM_DESTI  TM_DESTI[]
+  TM_PRSER  TM_PRSER[]
+
+  @@map("tm_munic")
+}
+
+model TM_PARRO {
+  PARR_COD  Int       @id @default(autoincrement()) @map("parr_cod")
+  PARR_NOM  String    @db.VarChar(100) @map("parr_nom")
+  PARR_POS  Int?      @map("parr_pos")
+  PARR_MUN  Int       @map("parr_mun")
+  TM_MUNIC  TM_MUNIC  @relation(fields: [PARR_MUN], references: [MUNI_COD], onDelete: Cascade, onUpdate: NoAction)
+
+  @@map("tm_parro")
+}
+
+// ==========================================
+// 2. SEGURIDAD, ROLES Y USUARIOS
+// ==========================================
+
+model TM_ROLES {
+  ROLE_COD Int        @id @default(autoincrement()) @map("role_cod")
+  ROLE_NOM String     @unique @db.VarChar(40) @map("role_nom")
+  ROLE_DES String?    @map("role_des")
+  TM_USUAR TM_USUAR[]
+
+  @@map("tm_roles")
+}
+
+model TM_USUAR {
+  USUA_COD Int              @id @default(autoincrement()) @map("usua_cod")
+  USUAR_NM String           @db.VarChar(100) @map("usuar_nm")
+  USUAR_EM String           @unique @db.VarChar(150) @map("usuar_em")
+  USUAR_PA String           @db.VarChar(255) @map("usuar_pa")
+  USUAR_PO Int?             @map("usuar_po")
+  USUAR_FR DateTime         @default(now()) @db.Timestamp(6) @map("usuar_fr")
+  USUAR_AC Boolean          @default(true) @map("usuar_ac")
+  USUAR_RO Int              @map("usuar_ro")
+
+  TM_PAISE        TM_PAISE?       @relation(fields: [USUAR_PO], references: [PAIS_COD], onDelete: NoAction, onUpdate: NoAction)
+  TM_ROLES        TM_ROLES        @relation(fields: [USUAR_RO], references: [ROLE_COD], onDelete: NoAction, onUpdate: NoAction)
+  TR_USU_REGI     TR_USU_REGI[]
+  TM_CONSU_CONS_USU TM_CONSU[]    @relation("CONS_USU")
+  TM_CONSU_CONS_ATE TM_CONSU[]    @relation("CONS_ATE")
+  TM_OPINI        TM_OPINI[]
+  TM_COINS        TM_COINS[]
+  TM_COTUR        TM_COTUR[]
+
+  @@map("tm_usuar")
+}
+
+model TR_USU_REGI {
+  USRE_COD Int       @id @default(autoincrement()) @map("usre_cod")
+  USRE_USU Int       @map("usre_usu")
+  USRE_REG Int       @map("usre_reg")
+  TM_USUAR TM_USUAR  @relation(fields: [USRE_USU], references: [USUA_COD], onDelete: Cascade, onUpdate: NoAction)
+  TM_REGION TM_REGION @relation(fields: [USRE_REG], references: [REGI_COD], onDelete: Cascade, onUpdate: NoAction)
+
+  @@map("tr_usu_regi")
+}
+
+// ==========================================
+// 3. TIPOS Y CATEGORÍAS
+// ==========================================
+
+model TM_TITUR {
+  TITU_COD Int         @id @default(autoincrement()) @map("titu_cod")
+  TITU_NOM String      @unique @db.VarChar(60) @map("titu_nom")
+  TITU_DES String?     @map("titu_des")
+  TM_DESTI TM_DESTI[]
+  TM_RUTAT TM_RUTAT[]
+
+  @@map("tm_titur")
+}
+
+model TM_TIEVE {
+  TIEV_COD Int         @id @default(autoincrement()) @map("tiev_cod")
+  TIEV_NOM String      @unique @db.VarChar(60) @map("tiev_nom")
+  TIEV_DES String?     @map("tiev_des")
+  TM_EVENT TM_EVENT[]
+
+  @@map("tm_tieve")
+}
+
+// ==========================================
+// 4. DESTINOS Y RUTAS TURÍSTICAS
+// ==========================================
+
+model TM_DESTI {
+  DEST_COD Int         @id @default(autoincrement()) @map("dest_cod")
+  DEST_NOM String      @db.VarChar(150) @map("dest_nom")
+  DEST_DES String?     @map("dest_des")
+  DEST_VIA String      @db.VarChar(10) @map("dest_via")
+  DEST_TTU Int         @map("dest_ttu")
+  DEST_MUN Int         @map("dest_mun")
+
+  TM_TITUR  TM_TITUR   @relation(fields: [DEST_TTU], references: [TITU_COD], onDelete: NoAction, onUpdate: NoAction)
+  TM_MUNIC  TM_MUNIC   @relation(fields: [DEST_MUN], references: [MUNI_COD], onDelete: NoAction, onUpdate: NoAction)
+  TM_UBDES  TM_UBDES?
+  TR_RUTDE  TR_RUTDE[]
+  TM_EVENT  TM_EVENT[]
+  TM_OPINI  TM_OPINI[]
+  TM_COTUR  TM_COTUR[]
+
+  @@map("tm_desti")
+}
+
+model TM_UBDES {
+  UBDE_COD Int           @id @default(autoincrement()) @map("ubde_cod")
+  UBDE_DES Int           @unique @map("ubde_des")
+  UBDE_LAT Decimal       @db.Decimal(10, 7) @map("ubde_lat")
+  UBDE_LON Decimal       @db.Decimal(10, 7) @map("ubde_lon")
+  UBDE_DIR String?       @db.VarChar(255) @map("ubde_dir")
+  TM_DESTI  TM_DESTI     @relation(fields: [UBDE_DES], references: [DEST_COD], onDelete: Cascade, onUpdate: NoAction)
+
+  @@map("tm_ubdes")
+}
+
+model TM_RUTAT {
+  RUTA_COD Int           @id @default(autoincrement()) @map("ruta_cod")
+  RUTA_NOM String        @db.VarChar(150) @map("ruta_nom")
+  RUTA_DES String?       @map("ruta_des")
+  RUTA_DUH Int?          @map("ruta_duh")
+  RUTA_DIS Float?        @map("ruta_dis")
+  RUTA_VIA String        @map("ruta_via")
+  RUTA_TTU Int           @map("ruta_ttu")
+
+  TM_TITUR  TM_TITUR     @relation(fields: [RUTA_TTU], references: [TITU_COD], onDelete: NoAction, onUpdate: NoAction)
+  TR_RUTDE  TR_RUTDE[]
+  TR_RUTHO  TR_RUTHO[]
+  TR_RUTGA  TR_RUTGA[]
+
+  @@map("tm_rutat")
+}
+
+model TR_RUTDE {
+  RTDE_COD Int       @id @default(autoincrement()) @map("rtde_cod")
+  RTDE_RUT Int       @map("rtde_rut")
+  RTDE_DES Int       @map("rtde_des")
+  RTDE_ORD Int       @map("rtde_ord")
+
+  TM_RUTAT  TM_RUTAT  @relation(fields: [RTDE_RUT], references: [RUTA_COD], onDelete: Cascade, onUpdate: NoAction)
+  TM_DESTI  TM_DESTI  @relation(fields: [RTDE_DES], references: [DEST_COD], onDelete: Cascade, onUpdate: NoAction)
+
+  @@map("tr_rutde")
+}
+
+// ==========================================
+// 5. PRESTADORES DE SERVICIOS
+// ==========================================
+
+model TM_PRSER {
+  PROV_COD Int              @id @default(autoincrement()) @map("prov_cod")
+  PROV_NOM String           @db.VarChar(150) @map("prov_nom")
+  PROV_TSE String           @db.VarChar(20) @map("prov_tse")
+  PROV_EMA String?          @db.VarChar(100) @map("prov_ema")
+  PROV_TEL String?          @db.VarChar(20) @map("prov_tel")
+  PROV_WEB String?          @db.VarChar(255) @map("prov_web")
+  PROV_ESV String           @db.VarChar(15) @map("prov_esv")
+  PROV_MUN Int              @map("prov_mun")
+
+  TM_MUNIC  TM_MUNIC        @relation(fields: [PROV_MUN], references: [MUNI_COD], onDelete: NoAction, onUpdate: NoAction)
+  TM_UBSER  TM_UBSER?
+  TM_HOSPE  TM_HOSPE?
+  TM_GASTR  TM_GASTR?
+  TM_TRANS  TM_TRANS?   
+
+  @@map("tm_prser")
+}
+
+model TM_UBSER {
+  UBSR_COD Int            @id @default(autoincrement()) @map("ubsr_cod")
+  UBSR_PRO Int            @unique @map("ubsr_pro")
+  UBSR_LAT Decimal        @db.Decimal(10, 7) @map("ubsr_lat")
+  UBSR_LON Decimal        @db.Decimal(10, 7) @map("ubsr_lon")
+  UBSR_DIR String?        @db.VarChar(255) @map("ubsr_dir")
+  TM_PRSER  TM_PRSER      @relation(fields: [UBSR_PRO], references: [PROV_COD], onDelete: Cascade, onUpdate: NoAction)
+
+  @@map("tm_ubser")
+}
+
+model TM_HOSPE {
+  HOSP_COD Int            @id @default(autoincrement()) @map("hosp_cod")
+  HOSP_PRO Int            @unique @map("hosp_pro")
+  HOSP_CAT String         @db.VarChar(30) @map("hosp_cat")
+  HOSP_NDH Int?           @map("hosp_ndh")
+  HOSP_HOR String?        @db.VarChar(30) @map("hosp_hor")
+  TM_PRSER  TM_PRSER      @relation(fields: [HOSP_PRO], references: [PROV_COD], onDelete: Cascade, onUpdate: NoAction)
+  TR_RUTHO  TR_RUTHO[]
+
+  @@map("tm_hospe")
+}
+
+model TM_GASTR {
+  GAST_COD Int            @id @default(autoincrement()) @map("gast_cod")
+  GAST_PSE Int            @unique @map("gast_pse")
+  GAST_TIG String         @db.VarChar(30) @map("gast_tig")
+  GAST_HOR String?        @db.VarChar(30) @map("gast_hor")
+  TM_PRSER  TM_PRSER      @relation(fields: [GAST_PSE], references: [PROV_COD], onDelete: Cascade, onUpdate: NoAction)
+  TR_RUTGA  TR_RUTGA[]
+
+  @@map("tm_gastr")
+}
+
+model TM_TRANS {
+  TRAN_COD Int            @id @default(autoincrement()) @map("tran_cod")
+  TRAN_PRO Int            @unique @map("tran_pro")
+  TRAN_TVE String         @db.VarChar(50) @map("tran_tve")
+  TRAN_CPA Int?           @map("tran_cpa")
+  TRAN_RUC String?        @map("tran_ruc")
+  TM_PRSER  TM_PRSER      @relation(fields: [TRAN_PRO], references: [PROV_COD], onDelete: Cascade, onUpdate: NoAction)
+
+  @@map("tm_trans")
+}
+
+model TR_RUTHO {
+  RTHO_COD Int          @id @default(autoincrement()) @map("rtho_cod")
+  RTHO_RUT Int          @map("rtho_rut")
+  RTHO_HOS Int          @map("rtho_hos")
+  TM_RUTAT  TM_RUTAT    @relation(fields: [RTHO_RUT], references: [RUTA_COD], onDelete: Cascade, onUpdate: NoAction)
+  TM_HOSPE  TM_HOSPE    @relation(fields: [RTHO_HOS], references: [HOSP_COD], onDelete: Cascade, onUpdate: NoAction)
+
+  @@map("tr_rutho")
+}
+
+model TR_RUTGA {
+  RTGA_COD Int          @id @default(autoincrement()) @map("rtga_cod")
+  RTGA_RUT Int          @map("rtga_rut")
+  RTGA_GAS Int          @map("rtga_gas")
+  TM_RUTAT  TM_RUTAT    @relation(fields: [RTGA_RUT], references: [RUTA_COD], onDelete: Cascade, onUpdate: NoAction)
+  TM_GASTR  TM_GASTR    @relation(fields: [RTGA_GAS], references: [GAST_COD], onDelete: Cascade, onUpdate: NoAction)
+
+  @@map("tr_rutga")
+}
+
+// ==========================================
+// 6. EVENTOS, CONSULTAS E INTERACCIÓN
+// ==========================================
+
+model TM_EVENT {
+  EVEN_COD Int         @id @default(autoincrement()) @map("even_cod")
+  EVEN_NOM String      @db.VarChar(150) @map("even_nom")
+  EVEN_DES String?     @map("even_des")
+  EVEN_FI DateTime     @db.Date @map("even_fi")
+  EVEN_FF DateTime?    @db.Date @map("even_ff")
+  EVEN_TE Int          @map("even_te")
+  EVEN_DI Int          @map("even_di")
+
+  TM_TIEVE  TM_TIEVE   @relation(fields: [EVEN_TE], references: [TIEV_COD], onDelete: NoAction, onUpdate: NoAction)
+  TM_DESTI  TM_DESTI   @relation(fields: [EVEN_DI], references: [DEST_COD], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("tm_event")
+}
+
+model TM_CONSU {
+  CONS_COD Int            @id @default(autoincrement()) @map("cons_cod")
+  CONS_CON String         @map("cons_con")
+  CONS_RES String?        @map("cons_res")
+  CONS_CAN String         @db.VarChar(20) @map("cons_can")
+  CONS_EST String         @db.VarChar(15) @map("cons_est")
+  CONS_FYH DateTime       @default(now()) @db.Timestamp(6) @map("cons_fyh")
+  CONS_USU Int?           @map("cons_usu")
+  CONS_ATE Int?           @map("cons_ate")
+
+  TM_USUAR_CONS_USU TM_USUAR? @relation("CONS_USU", fields: [CONS_USU], references: [USUA_COD], onDelete: NoAction, onUpdate: NoAction)
+  TM_USUAR_CONS_ATE TM_USUAR? @relation("CONS_ATE", fields: [CONS_ATE], references: [USUA_COD], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("tm_consu")
+}
+
+/// This table contains check constraints (reco_cal between 1 and 5)
+model TM_OPINI {
+  RECO_COD Int        @id @default(autoincrement()) @map("reco_cod")
+  RECO_CAL Int        @map("reco_cal")
+  RECO_COM String?    @map("reco_com")
+  RECO_FEO DateTime   @db.Date @map("reco_feo")
+  RECO_USU Int        @map("reco_usu")
+  RECO_DES Int        @map("reco_des")
+
+  TM_USUAR  TM_USUAR  @relation(fields: [RECO_USU], references: [USUA_COD], onDelete: NoAction, onUpdate: NoAction)
+  TM_DESTI  TM_DESTI  @relation(fields: [RECO_DES], references: [DEST_COD], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("tm_opini")
+}
+
+// ==========================================
+// 7. GESTIÓN DE CONTENIDO (CMS)
+// ==========================================
+
+model TM_COINS {
+  CINS_COD Int         @id @default(autoincrement()) @map("cins_cod")
+  CINS_TIT String      @db.VarChar(200) @map("cins_tit")
+  CINS_TCO String      @db.VarChar(20) @map("cins_tco")
+  CINS_DES String?     @map("cins_des")
+  CINS_URL String?     @db.VarChar(255) @map("cins_url")
+  CINS_FPU DateTime    @db.Date @map("cins_fpu")
+  CINS_AUT Int         @map("cins_aut")
+
+  TM_USUAR  TM_USUAR   @relation(fields: [CINS_AUT], references: [USUA_COD], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("tm_coins")
+}
+
+model TM_COTUR {
+  CTUR_COD Int         @id @default(autoincrement()) @map("ctur_cod")
+  CTUR_TIT String      @db.VarChar(200) @map("ctur_tit")
+  CTUR_TCO String      @db.VarChar(20) @map("ctur_tco")
+  CTUR_DES String?     @map("ctur_des")
+  CTUR_URL String?     @db.VarChar(255) @map("ctur_url")
+  CTUR_FPU DateTime    @db.Date @map("ctur_fpu")
+  CTUR_AUT Int         @map("ctur_aut")
+  CTUR_DET Int         @map("ctur_det")
+
+  TM_USUAR  TM_USUAR   @relation(fields: [CTUR_AUT], references: [USUA_COD], onDelete: NoAction, onUpdate: NoAction)
+  TM_DESTI  TM_DESTI   @relation(fields: [CTUR_DET], references: [DEST_COD], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("tm_cotur")
+}

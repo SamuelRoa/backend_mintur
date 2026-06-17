@@ -1,0 +1,35 @@
+# Dependencias
+node_modules/
+
+# Variables de entorno
+.env
+.env.local
+.env.production
+
+# Prisma
+prisma/dev.db
+prisma/dev.db-journal
+
+# Logs
+*.log
+npm-debug.log*
+
+# Archivos de subida/descarga temporal
+uploads/
+tmp/
+
+# Build
+dist/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+
+# Coverage de tests
+coverage/
+
+/src/generated/prisma
