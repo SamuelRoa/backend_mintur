@@ -152,6 +152,7 @@ model TM_DESTI {
   DEST_VIA String      @db.VarChar(10) @map("dest_via")
   DEST_TTU Int         @map("dest_ttu")
   DEST_MUN Int         @map("dest_mun")
+  DEST_IMG String?     @db.VarChar(500) @map("dest_img")
 
   TM_TITUR  TM_TITUR   @relation(fields: [DEST_TTU], references: [TITU_COD], onDelete: NoAction, onUpdate: NoAction)
   TM_MUNIC  TM_MUNIC   @relation(fields: [DEST_MUN], references: [MUNI_COD], onDelete: NoAction, onUpdate: NoAction)
@@ -304,6 +305,7 @@ model TM_EVENT {
   EVEN_FF DateTime?    @db.Date @map("even_ff")
   EVEN_TE Int          @map("even_te")
   EVEN_DI Int          @map("even_di")
+  EVEN_IMG String?     @db.VarChar(500) @map("even_img")
 
   TM_TIEVE  TM_TIEVE   @relation(fields: [EVEN_TE], references: [TIEV_COD], onDelete: NoAction, onUpdate: NoAction)
   TM_DESTI  TM_DESTI   @relation(fields: [EVEN_DI], references: [DEST_COD], onDelete: NoAction, onUpdate: NoAction)

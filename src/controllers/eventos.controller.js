@@ -34,8 +34,14 @@ const getEventos = async (req, res, next) => {
           TM_DESTI: {
             select: {
               DEST_NOM: true,
+              DEST_IMG: true,
               DEST_MUN: true,
-              TM_MUNIC: { select: { MUNI_NOM: true } },
+              TM_MUNIC: {
+                select: {
+                  MUNI_NOM: true,
+                  TM_ESTADO: { select: { ESTA_NOM: true, ESTA_REGI: true } },
+                },
+              },
             },
           },
         },

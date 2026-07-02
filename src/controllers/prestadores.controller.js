@@ -11,11 +11,12 @@ const { sendEstadoPrestadorEmail } = require('../services/mail.service');
 const getPrestadores = async (req, res, next) => {
   try {
     const { skip, take, page, limit } = getPaginationParams(req.query);
-    const { tipo, estado, municipio, regionId } = req.query;
+    const { tipo, estado, municipio, regionId, email } = req.query;
 
     const where = {};
     if (tipo) where.PROV_TSE = tipo;
     if (estado) where.PROV_ESV = estado;
+    if (email) where.PROV_EMA = email;
     if (municipio) where.PROV_MUN = parseInt(municipio);
     if (regionId) {
       where.TM_MUNIC = {

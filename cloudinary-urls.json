@@ -1,0 +1,278 @@
+[
+  {
+    "file": "Avila.jpg",
+    "publicId": "Avila",
+    "url": "https://res.cloudinary.com/dqe0chrwm/image/upload/v1782970825/mintur/destinos/Avila.jpg",
+    "folder": "destinos"
+  },
+  {
+    "file": "Canaima.jpg",
+    "publicId": "Canaima",
+    "url": "https://res.cloudinary.com/dqe0chrwm/image/upload/v1782970826/mintur/destinos/Canaima.jpg",
+    "folder": "destinos"
+  },
+  {
+    "file": "Caracas.jpeg",
+    "publicId": "Caracas",
+    "url": "https://res.cloudinary.com/dqe0chrwm/image/upload/v1782972215/mintur/destinos/Caracas.jpg",
+    "folder": "destinos"
+  },
+  {
+    "file": "castillo_san_carlos_borromeo.jpg",
+    "publicId": "castillo_san_carlos_borromeo",
+    "url": "https://res.cloudinary.com/dqe0chrwm/image/upload/v1782970826/mintur/destinos/castillo_san_carlos_borromeo.jpg",
+    "folder": "destinos"
+  },
+  {
+    "file": "Cerro_Autana.jpg",
+    "publicId": "Cerro_Autana",
+    "url": "https://res.cloudinary.com/dqe0chrwm/image/upload/v1782970827/mintur/destinos/Cerro_Autana.jpg",
+    "folder": "destinos"
+  },
+  {
+    "file": "Cerro_El_Morro.jpg",
+    "publicId": "Cerro_El_Morro",
+    "url": "https://res.cloudinary.com/dqe0chrwm/image/upload/v1782970828/mintur/destinos/Cerro_El_Morro.jpg",
+    "folder": "destinos"
+  },
+  {
+    "file": "Colonia_Tovar.jpg",
+    "publicId": "Colonia_Tovar",
+    "url": "https://res.cloudinary.com/dqe0chrwm/image/upload/v1782972216/mintur/destinos/Colonia_Tovar.jpg",
+    "folder": "destinos"
+  },
+  {
+    "file": "esteros_camaguan.jpg",
+    "publicId": "esteros_camaguan",
+    "url": "https://res.cloudinary.com/dqe0chrwm/image/upload/v1782970829/mintur/destinos/esteros_camaguan.jpg",
+    "folder": "destinos"
+  },
+  {
+    "file": "Hato_El_Cedral.jpeg",
+    "publicId": "Hato_El_Cedral",
+    "url": "https://res.cloudinary.com/dqe0chrwm/image/upload/v1782970830/mintur/destinos/Hato_El_Cedral.jpg",
+    "folder": "destinos"
+  },
+  {
+    "file": "Hneri_Pittier.jpg",
+    "publicId": "Hneri_Pittier",
+    "url": "https://res.cloudinary.com/dqe0chrwm/image/upload/v1782970831/mintur/destinos/Hneri_Pittier.jpg",
+    "folder": "destinos"
+  },
+  {
+    "file": "LagunaMucubaji.jpg",
+    "publicId": "LagunaMucubaji",
+    "url": "https://res.cloudinary.com/dqe0chrwm/image/upload/v1782972217/mintur/destinos/LagunaMucubaji.jpg",
+    "folder": "destinos"
+  },
+  {
+    "file": "La_Cueva_del_Guacharo.jpg",
+    "publicId": "La_Cueva_del_Guacharo",
+    "url": "https://res.cloudinary.com/dqe0chrwm/image/upload/v1782970832/mintur/destinos/La_Cueva_del_Guacharo.jpg",
+    "folder": "destinos"
+  },
+  {
+    "file": "Los_Roques.jpg",
+    "publicId": "Los_Roques",
+    "url": "https://res.cloudinary.com/dqe0chrwm/image/upload/v1782972218/mintur/destinos/Los_Roques.jpg",
+    "folder": "destinos"
+  },
+  {
+    "file": "Medanos_Coro.jpeg",
+    "publicId": "Medanos_Coro",
+    "url": "https://res.cloudinary.com/dqe0chrwm/image/upload/v1782970834/mintur/destinos/Medanos_Coro.jpg",
+    "folder": "destinos"
+  },
+  {
+    "file": "Mochima.jpg",
+    "publicId": "Mochima",
+    "url": "https://res.cloudinary.com/dqe0chrwm/image/upload/v1782970835/mintur/destinos/Mochima.jpg",
+    "folder": "destinos"
+  },
+  {
+    "file": "Morrocoy.jpg",
+    "publicId": "Morrocoy",
+    "url": "https://res.cloudinary.com/dqe0chrwm/image/upload/v1782970836/mintur/destinos/Morrocoy.jpg",
+    "folder": "destinos"
+  },
+  {
+    "file": "Museo_Bellas_Artes.jpg",
+    "publicId": "Museo_Bellas_Artes",
+    "url": "https://res.cloudinary.com/dqe0chrwm/image/upload/v1782970837/mintur/destinos/Museo_Bellas_Artes.jpg",
+    "folder": "destinos"
+  },
+  {
+    "file": "Obelisco_Barquisimeto.jpg",
+    "publicId": "Obelisco_Barquisimeto",
+    "url": "https://res.cloudinary.com/dqe0chrwm/image/upload/v1782970838/mintur/destinos/Obelisco_Barquisimeto.jpg",
+    "folder": "destinos"
+  },
+  {
+    "file": "Paramo_zumbador.webp",
+    "publicId": "Paramo_zumbador",
+    "url": "https://res.cloudinary.com/dqe0chrwm/image/upload/v1782970839/mintur/destinos/Paramo_zumbador.webp",
+    "folder": "destinos"
+  },
+  {
+    "file": "Parque_La_Llovizna.jpg",
+    "publicId": "Parque_La_Llovizna",
+    "url": "https://res.cloudinary.com/dqe0chrwm/image/upload/v1782970841/mintur/destinos/Parque_La_Llovizna.jpg",
+    "folder": "destinos"
+  },
+  {
+    "file": "Pico_Bolivar.jpg",
+    "publicId": "Pico_Bolivar",
+    "url": "https://res.cloudinary.com/dqe0chrwm/image/upload/v1782970842/mintur/destinos/Pico_Bolivar.jpg",
+    "folder": "destinos"
+  },
+  {
+    "file": "Playa_ElAgua.webp",
+    "publicId": "Playa_ElAgua",
+    "url": "https://res.cloudinary.com/dqe0chrwm/image/upload/v1782970844/mintur/destinos/Playa_ElAgua.webp",
+    "folder": "destinos"
+  },
+  {
+    "file": "Puerto_Ayacucho.jpg",
+    "publicId": "Puerto_Ayacucho",
+    "url": "https://res.cloudinary.com/dqe0chrwm/image/upload/v1782970845/mintur/destinos/Puerto_Ayacucho.jpg",
+    "folder": "destinos"
+  },
+  {
+    "file": "relampago_catatumbo.webp",
+    "publicId": "relampago_catatumbo",
+    "url": "https://res.cloudinary.com/dqe0chrwm/image/upload/v1782970847/mintur/destinos/relampago_catatumbo.webp",
+    "folder": "destinos"
+  },
+  {
+    "file": "Roraima.jpg",
+    "publicId": "Roraima",
+    "url": "https://res.cloudinary.com/dqe0chrwm/image/upload/v1782970848/mintur/destinos/Roraima.jpg",
+    "folder": "destinos"
+  },
+  {
+    "file": "Santuario_Virgen_Coromoto.jpg",
+    "publicId": "Santuario_Virgen_Coromoto",
+    "url": "https://res.cloudinary.com/dqe0chrwm/image/upload/v1782970849/mintur/destinos/Santuario_Virgen_Coromoto.jpg",
+    "folder": "destinos"
+  },
+  {
+    "file": "san_fernando_apure.jpg",
+    "publicId": "san_fernando_apure",
+    "url": "https://res.cloudinary.com/dqe0chrwm/image/upload/v1782970849/mintur/destinos/san_fernando_apure.jpg",
+    "folder": "destinos"
+  },
+  {
+    "file": "San_Pedro.jpg",
+    "publicId": "San_Pedro",
+    "url": "https://res.cloudinary.com/dqe0chrwm/image/upload/v1782970850/mintur/destinos/San_Pedro.jpg",
+    "folder": "destinos"
+  },
+  {
+    "file": "cafe.jpg",
+    "publicId": "cafe",
+    "url": "https://res.cloudinary.com/dqe0chrwm/image/upload/v1783014847/mintur/eventos/cafe.jpg",
+    "folder": "eventos"
+  },
+  {
+    "file": "carnavales_callao.jpg",
+    "publicId": "carnavales_callao",
+    "url": "https://res.cloudinary.com/dqe0chrwm/image/upload/v1783014848/mintur/eventos/carnavales_callao.jpg",
+    "folder": "eventos"
+  },
+  {
+    "file": "diablos_yare.jpg",
+    "publicId": "diablos_yare",
+    "url": "https://res.cloudinary.com/dqe0chrwm/image/upload/v1783014848/mintur/eventos/diablos_yare.jpg",
+    "folder": "eventos"
+  },
+  {
+    "file": "divina_pastora.jpg",
+    "publicId": "divina_pastora",
+    "url": "https://res.cloudinary.com/dqe0chrwm/image/upload/v1783014849/mintur/eventos/divina_pastora.jpg",
+    "folder": "eventos"
+  },
+  {
+    "file": "elorza.jpg",
+    "publicId": "elorza",
+    "url": "https://res.cloudinary.com/dqe0chrwm/image/upload/v1783014850/mintur/eventos/elorza.jpg",
+    "folder": "eventos"
+  },
+  {
+    "file": "encuentro_indigena.jpg",
+    "publicId": "encuentro_indigena",
+    "url": "https://res.cloudinary.com/dqe0chrwm/image/upload/v1783014851/mintur/eventos/encuentro_indigena.jpg",
+    "folder": "eventos"
+  },
+  {
+    "file": "ferias_del_sol.jpeg",
+    "publicId": "ferias_del_sol",
+    "url": "https://res.cloudinary.com/dqe0chrwm/image/upload/v1783014852/mintur/eventos/ferias_del_sol.jpg",
+    "folder": "eventos"
+  },
+  {
+    "file": "feria_agropecuaria.webp",
+    "publicId": "feria_agropecuaria",
+    "url": "https://res.cloudinary.com/dqe0chrwm/image/upload/v1783014853/mintur/eventos/feria_agropecuaria.webp",
+    "folder": "eventos"
+  },
+  {
+    "file": "feria_chinita.jpeg",
+    "publicId": "feria_chinita",
+    "url": "https://res.cloudinary.com/dqe0chrwm/image/upload/v1783014853/mintur/eventos/feria_chinita.jpg",
+    "folder": "eventos"
+  },
+  {
+    "file": "feria_del_orinoco.jpg",
+    "publicId": "feria_del_orinoco",
+    "url": "https://res.cloudinary.com/dqe0chrwm/image/upload/v1783014854/mintur/eventos/feria_del_orinoco.jpg",
+    "folder": "eventos"
+  },
+  {
+    "file": "feria_san_sebastian.webp",
+    "publicId": "feria_san_sebastian",
+    "url": "https://res.cloudinary.com/dqe0chrwm/image/upload/v1783014855/mintur/eventos/feria_san_sebastian.webp",
+    "folder": "eventos"
+  },
+  {
+    "file": "festival_del_mar.jpg",
+    "publicId": "festival_del_mar",
+    "url": "https://res.cloudinary.com/dqe0chrwm/image/upload/v1783014856/mintur/eventos/festival_del_mar.jpg",
+    "folder": "eventos"
+  },
+  {
+    "file": "festival_gaitas.jpg",
+    "publicId": "festival_gaitas",
+    "url": "https://res.cloudinary.com/dqe0chrwm/image/upload/v1783014856/mintur/eventos/festival_gaitas.jpg",
+    "folder": "eventos"
+  },
+  {
+    "file": "festival_musical_avila.jpg",
+    "publicId": "festival_musical_avila",
+    "url": "https://res.cloudinary.com/dqe0chrwm/image/upload/v1783014857/mintur/eventos/festival_musical_avila.jpg",
+    "folder": "eventos"
+  },
+  {
+    "file": "margarita_gastronomica.jpg",
+    "publicId": "margarita_gastronomica",
+    "url": "https://res.cloudinary.com/dqe0chrwm/image/upload/v1783014858/mintur/eventos/margarita_gastronomica.jpg",
+    "folder": "eventos"
+  },
+  {
+    "file": "procesion_maritima.jpg",
+    "publicId": "procesion_maritima",
+    "url": "https://res.cloudinary.com/dqe0chrwm/image/upload/v1783014859/mintur/eventos/procesion_maritima.jpg",
+    "folder": "eventos"
+  },
+  {
+    "file": "semana_santa_andes.jpg",
+    "publicId": "semana_santa_andes",
+    "url": "https://res.cloudinary.com/dqe0chrwm/image/upload/v1783014859/mintur/eventos/semana_santa_andes.jpg",
+    "folder": "eventos"
+  },
+  {
+    "file": "serie_del_caribe.jpg",
+    "publicId": "serie_del_caribe",
+    "url": "https://res.cloudinary.com/dqe0chrwm/image/upload/v1783014860/mintur/eventos/serie_del_caribe.jpg",
+    "folder": "eventos"
+  }
+]

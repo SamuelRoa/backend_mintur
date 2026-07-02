@@ -18,7 +18,7 @@ const optional = (key, defaultValue = '') => {
 const env = {
   // Servidor
   NODE_ENV: optional('NODE_ENV', 'development'),
-  PORT: parseInt(optional('PORT', '3000'), 10),
+  PORT: parseInt(optional('PORT', '8000'), 10),
   isDev: optional('NODE_ENV', 'development') === 'development',
   isProd: optional('NODE_ENV', 'development') === 'production',
 
@@ -44,11 +44,11 @@ const env = {
   RESET_TOKEN_EXPIRES_IN: optional('RESET_TOKEN_EXPIRES_IN', '1h'),
 
   // Frontend URLs
-  FRONTEND_URL: optional('FRONTEND_URL', 'http://localhost:5173'),
-  WEBSITE_URL: optional('WEBSITE_URL', 'http://localhost:5174'),
+  FRONTEND_URL: optional('FRONTEND_URL', 'http://localhost:8001'),
+  WEBSITE_URL: optional('WEBSITE_URL', 'http://localhost:8002'),
 
   // CORS
-  CORS_ORIGINS: optional('CORS_ORIGINS', 'http://localhost:5173').split(',').map((o) => o.trim()),
+  CORS_ORIGINS: optional('CORS_ORIGINS', 'http://localhost:8001').split(',').map((o) => o.trim()),
 };
 
 module.exports = env;

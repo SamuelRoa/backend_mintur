@@ -41,7 +41,13 @@ const getRutas = async (req, res, next) => {
               TM_DESTI: {
                 include: {
                   TM_UBDES: true,
-                  TM_MUNIC: { select: { MUNI_NOM: true } },
+                  TM_MUNIC: {
+                    select: {
+                      MUNI_NOM: true,
+                      MUNI_EST: true,
+                      TM_ESTADO: { select: { ESTA_NOM: true, ESTA_REGI: true } },
+                    },
+                  },
                 },
               },
             },
