@@ -60,7 +60,7 @@ const login = async (req, res, next) => {
  */
 const register = async (req, res, next) => {
   try {
-    const { nombre, email, password, rolId, paisId } = req.body;
+    const { nombre, email, password, rolId, paisId, desdePanel } = req.body;
 
     const existingUser = await prisma.tM_USUAR.findUnique({
       where: { USUAR_EM: email },
@@ -70,6 +70,19 @@ const register = async (req, res, next) => {
       return error(res, 'Ya existe un usuario registrado con ese correo electrónico', 409);
     }
 
+    // Determinar rol automáticamente si no se especifica
+    let assignedRolId = rolId;
+    if (!assignedRolId) {
+      const roleName = desdePanel ? 'Gestor Turístico' : 'Prestador Servicio';
+      const role = await prisma.tM_ROLES.findUnique({
+        where: { ROLE_NOM: roleName },
+      });
+      if (!role) {
+        return error(res, `Rol por defecto "${roleName}" no encontrado en la base de datos`, 500);
+      }
+      assignedRolId = role.ROLE_COD;
+    }
+
     const hashedPassword = await bcrypt.hash(password, 12);
 
     const newUser = await prisma.tM_USUAR.create({
@@ -77,7 +90,7 @@ const register = async (req, res, next) => {
         USUAR_NM: nombre,
         USUAR_EM: email,
         USUAR_PA: hashedPassword,
-        USUAR_RO: rolId ?? 2, // rol por defecto
+        USUAR_RO: assignedRolId,
         USUAR_PO: paisId ?? null,
         USUAR_AC: true,
       },

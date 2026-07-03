@@ -30,7 +30,7 @@ const registerValidations = [
   body('password')
     .isLength({ min: 8 })
     .withMessage('La contraseña debe tener al menos 8 caracteres'),
-  body('rolId').optional().isInt({ min: 1 }).withMessage('Rol inválido'),
+  body('rolId').optional({ values: 'null' }).isInt({ min: 1 }).withMessage('Rol inválido'),
   handleValidationErrors,
 ];
 

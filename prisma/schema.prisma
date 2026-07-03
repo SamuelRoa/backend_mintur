@@ -104,6 +104,7 @@ model TM_USUAR {
   TM_OPINI        TM_OPINI[]
   TM_COINS        TM_COINS[]
   TM_COTUR        TM_COTUR[]
+  TM_PRSER        TM_PRSER[]
 
   @@map("tm_usuar")
 }
@@ -218,8 +219,10 @@ model TM_PRSER {
   PROV_WEB String?          @db.VarChar(255) @map("prov_web")
   PROV_ESV String           @db.VarChar(15) @map("prov_esv")
   PROV_MUN Int              @map("prov_mun")
+  PROV_USU Int?             @map("prov_usu")
 
   TM_MUNIC  TM_MUNIC        @relation(fields: [PROV_MUN], references: [MUNI_COD], onDelete: NoAction, onUpdate: NoAction)
+  TM_USUAR  TM_USUAR?       @relation(fields: [PROV_USU], references: [USUA_COD], onDelete: NoAction, onUpdate: NoAction)
   TM_UBSER  TM_UBSER?
   TM_HOSPE  TM_HOSPE?
   TM_GASTR  TM_GASTR?

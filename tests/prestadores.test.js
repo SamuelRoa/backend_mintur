@@ -44,12 +44,22 @@ describe('Prestadores Endpoints', () => {
   });
 
   describe('POST /api/prestadores', () => {
-    test('crea prestador público sin auth', async () => {
-      prisma.tM_PRSER.create.mockResolvedValue({ PROV_COD: 1, PROV_ESV: 'pend' });
+    test('crea prestador requiere auth', async () => {
+      const { generateTokenPair } = require('../src/services/token.service');
+      const tokens = generateTokenPair({ USUA_COD: 1, USUAR_NM: 'Test', USUAR_EM: 'test@test.com', USUAR_RO: 60 });
+      prisma.tM_PRSER.create.mockResolvedValue({ PROV_COD: 1, PROV_ESV: 'pend', PROV_USU: 1 });
       const res = await request(app)
         .post('/api/prestadores')
+        .set('Authorization', `Bearer ${tokens.accessToken}`)
         .send({ nombre: 'Nuevo Hotel', tipo: 'hosped', municipioId: 1, lat: 10.5, lon: -66.9 });
       expect(res.status).toBe(201);
+    });
+
+    test('crea prestador sin auth retorna 401', async () => {
+      const res = await request(app)
+        .post('/api/prestadores')
+        .send({ nombre: 'Nuevo Hotel', tipo: 'hosped', municipioId: 1 });
+      expect(res.status).toBe(401);
     });
   });
 });

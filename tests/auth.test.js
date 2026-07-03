@@ -59,17 +59,19 @@ describe('Auth Endpoints', () => {
   });
 
   describe('POST /api/auth/register', () => {
-    test('registro exitoso retorna 201', async () => {
+    test('registro exitoso desde panel retorna 201', async () => {
       prisma.tM_USUAR.findUnique.mockResolvedValue(null);
+      prisma.tM_ROLES.findUnique.mockResolvedValue({ ROLE_COD: 59, ROLE_NOM: 'Gestor Turístico' });
       prisma.tM_USUAR.create.mockResolvedValue({
         USUA_COD: 2, USUAR_NM: 'Nuevo', USUAR_EM: 'nuevo@test.com',
-        USUAR_RO: 2, USUAR_AC: true, USUAR_FR: new Date(),
+        USUAR_RO: 59, USUAR_AC: true, USUAR_FR: new Date(),
       });
       const res = await request(app)
         .post('/api/auth/register')
-        .send({ nombre: 'Nuevo Usuario', email: 'nuevo@test.com', password: 'password123' });
+        .send({ nombre: 'Nuevo Usuario', email: 'nuevo@test.com', password: 'password123', desdePanel: true });
       expect(res.status).toBe(201);
       expect(res.body.success).toBe(true);
+      expect(res.body.data.USUAR_RO).toBe(59);
     });
 
     test('email duplicado retorna 409', async () => {

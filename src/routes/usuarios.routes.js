@@ -1,11 +1,13 @@
 const { Router } = require('express');
 const { authenticate } = require('../middleware/auth.middleware');
+const { requireRole } = require('../middleware/role.middleware');
 const { getUsuarios, getUsuarioById, updateUsuario, deleteUsuario, getRoles } = require('../controllers/usuarios.controller');
 
 const router = Router();
 
-// Todos los endpoints de usuarios requieren autenticación
+// Solo Administrador puede gestionar usuarios
 router.use(authenticate);
+router.use(requireRole(55));
 
 router.get('/', getUsuarios);
 router.get('/roles', getRoles);

@@ -87,7 +87,6 @@ const createPrestador = async (req, res, next) => {
   try {
     const {
       nombre, tipo, email, telefono, web, municipioId, lat, lon, direccion,
-      // Datos específicos por tipo
       hospe, gastr, trans,
     } = req.body;
 
@@ -100,6 +99,7 @@ const createPrestador = async (req, res, next) => {
         PROV_WEB: web,
         PROV_ESV: 'pend',
         PROV_MUN: municipioId,
+        PROV_USU: req.user?.sub ?? null,
         TM_UBSER: { create: { UBSR_LAT: lat, UBSR_LON: lon, UBSR_DIR: direccion } },
         ...(tipo === 'hosped' && hospe ? {
           TM_HOSPE: { create: { HOSP_CAT: hospe.categoria, HOSP_NDH: hospe.numHabitaciones, HOSP_HOR: hospe.horario } },
@@ -174,6 +174,68 @@ const deletePrestador = async (req, res, next) => {
   }
 };
 
+const getMiPerfil = async (req, res, next) => {
+  try {
+    const prestador = await prisma.tM_PRSER.findFirst({
+      where: { PROV_USU: req.user.sub },
+      include: {
+        TM_MUNIC: true,
+        TM_UBSER: true,
+        TM_HOSPE: true,
+        TM_GASTR: true,
+        TM_TRANS: true,
+      },
+    });
+
+    if (!prestador) return notFound(res, 'No tienes un prestador registrado');
+    return success(res, prestador);
+  } catch (err) {
+    next(err);
+  }
+};
+
+const updateMiPerfil = async (req, res, next) => {
+  try {
+    const prestador = await prisma.tM_PRSER.findFirst({
+      where: { PROV_USU: req.user.sub },
+    });
+
+    if (!prestador) return notFound(res, 'No tienes un prestador registrado');
+    if (prestador.PROV_ESV !== 'validado') {
+      return error(res, 'Tu prestador debe estar validado para poder editar la información', 400);
+    }
+
+    const { nombre, email, telefono, web, direccion, lat, lon } = req.body;
+    const data = {};
+    if (nombre) data.PROV_NOM = nombre;
+    if (email) data.PROV_EMA = email;
+    if (telefono) data.PROV_TEL = telefono;
+    if (web) data.PROV_WEB = web;
+
+    const updated = await prisma.tM_PRSER.update({
+      where: { PROV_COD: prestador.PROV_COD },
+      data,
+    });
+
+    // Actualizar ubicación si se proporcionó
+    if (lat !== undefined || lon !== undefined || direccion !== undefined) {
+      await prisma.tM_UBSER.upsert({
+        where: { UBSR_PRO: prestador.PROV_COD },
+        create: { UBSR_PRO: prestador.PROV_COD, UBSR_LAT: lat, UBSR_LON: lon, UBSR_DIR: direccion },
+        update: {
+          ...(lat !== undefined && { UBSR_LAT: lat }),
+          ...(lon !== undefined && { UBSR_LON: lon }),
+          ...(direccion !== undefined && { UBSR_DIR: direccion }),
+        },
+      });
+    }
+
+    return success(res, updated, 'Perfil actualizado exitosamente');
+  } catch (err) {
+    next(err);
+  }
+};
+
 const exportarPrestadores = async (req, res, next) => {
   try {
     const { generateCSV, sendCSVDownload } = require('../services/file.service');
@@ -201,4 +263,5 @@ const exportarPrestadores = async (req, res, next) => {
 module.exports = {
   getPrestadores, getPrestadorById, createPrestador,
   updatePrestador, updateEstadoPrestador, deletePrestador, exportarPrestadores,
+  getMiPerfil, updateMiPerfil,
 };
