@@ -5,10 +5,12 @@
 
 require('dotenv').config();
 
+const http = require('http');
 const app = require('./app');
 const env = require('./config/env');
 const prisma = require('./config/database');
 const { verifyMailConnection } = require('./config/mailer');
+const { initSocket } = require('./services/socket');
 
 const PORT = env.PORT;
 
@@ -22,11 +24,15 @@ const startServer = async () => {
       await verifyMailConnection();
     }
 
-    // Iniciar servidor HTTP
-    app.listen(PORT, () => {
+    // Iniciar servidor HTTP con Socket.io
+    const server = http.createServer(app);
+    initSocket(server);
+
+    server.listen(PORT, () => {
       console.log(`🚀 Servidor COTATUR corriendo en el puerto ${PORT}`);
       console.log(`📌 Entorno: ${env.NODE_ENV}`);
       console.log(`🔗 Health check: http://localhost:${PORT}/api/health`);
+      console.log(`🔌 WebSocket habilitado para notificaciones en tiempo real`);
     });
   } catch (error) {
     console.error('❌ Error al iniciar el servidor:', error);

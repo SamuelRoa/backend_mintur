@@ -7,6 +7,7 @@ const prisma = require('../config/database');
 const { getPaginationParams, buildPaginationMeta } = require('../utils/pagination.util');
 const { success, created, notFound } = require('../utils/response.util');
 const { sendEstadoPrestadorEmail } = require('../services/mail.service');
+const { getIO } = require('../services/socket');
 
 const getPrestadores = async (req, res, next) => {
   try {
@@ -113,6 +114,20 @@ const createPrestador = async (req, res, next) => {
       },
       include: { TM_UBSER: true },
     });
+
+    // Emitir evento en tiempo real al panel administrativo
+    try {
+      const io = getIO();
+      io.emit('new-prestador', {
+        id: prestador.PROV_COD,
+        nombre: prestador.PROV_NOM,
+        tipo: prestador.PROV_TSE,
+        email: prestador.PROV_EMA,
+        fecha: new Date().toISOString(),
+      });
+    } catch (_) {
+      // Socket no disponible, continuar sin notificación
+    }
 
     return created(res, prestador, 'Prestador registrado exitosamente. Pendiente de validación.');
   } catch (err) {
