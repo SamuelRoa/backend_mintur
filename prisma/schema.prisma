@@ -26,6 +26,7 @@ model TM_REGION {
   TM_CORPO  TM_CORPO[]
   TM_ESTADO TM_ESTADO[]
   TR_USU_REGI TR_USU_REGI[]
+  TM_REGCM  TM_REGCM?
 
   @@map("tm_region")
 }
@@ -154,6 +155,8 @@ model TM_DESTI {
   DEST_TTU Int         @map("dest_ttu")
   DEST_MUN Int         @map("dest_mun")
   DEST_IMG String?     @db.VarChar(500) @map("dest_img")
+  DEST_FAV Boolean      @default(false) @map("dest_fav")
+  DEST_ORD Int          @default(0) @map("dest_ord")
 
   TM_TITUR  TM_TITUR   @relation(fields: [DEST_TTU], references: [TITU_COD], onDelete: NoAction, onUpdate: NoAction)
   TM_MUNIC  TM_MUNIC   @relation(fields: [DEST_MUN], references: [MUNI_COD], onDelete: NoAction, onUpdate: NoAction)
@@ -185,6 +188,8 @@ model TM_RUTAT {
   RUTA_DIS Float?        @map("ruta_dis")
   RUTA_VIA String        @map("ruta_via")
   RUTA_TTU Int           @map("ruta_ttu")
+  RUTA_FAV Boolean       @default(false) @map("ruta_fav")
+  RUTA_ORD Int           @default(0) @map("ruta_ord")
 
   TM_TITUR  TM_TITUR     @relation(fields: [RUTA_TTU], references: [TITU_COD], onDelete: NoAction, onUpdate: NoAction)
   TR_RUTDE  TR_RUTDE[]
@@ -309,6 +314,8 @@ model TM_EVENT {
   EVEN_TE Int          @map("even_te")
   EVEN_DI Int          @map("even_di")
   EVEN_IMG String?     @db.VarChar(500) @map("even_img")
+  EVEN_FAV Boolean      @default(false) @map("even_fav")
+  EVEN_ORD Int          @default(0) @map("even_ord")
 
   TM_TIEVE  TM_TIEVE   @relation(fields: [EVEN_TE], references: [TIEV_COD], onDelete: NoAction, onUpdate: NoAction)
   TM_DESTI  TM_DESTI   @relation(fields: [EVEN_DI], references: [DEST_COD], onDelete: NoAction, onUpdate: NoAction)
@@ -379,4 +386,31 @@ model TM_COTUR {
   TM_DESTI  TM_DESTI   @relation(fields: [CTUR_DET], references: [DEST_COD], onDelete: NoAction, onUpdate: NoAction)
 
   @@map("tm_cotur")
+}
+
+// ==========================================
+// 8. CMS SITIO + REGIONES (editable desde panel)
+// ==========================================
+
+model TM_SITE {
+  SITE_KEY String   @id @map("site_key") @db.VarChar(80)
+  SITE_VAL String?  @map("site_val")
+  SITE_DES String?  @map("site_des") @db.VarChar(255)
+
+  @@map("tm_site")
+}
+
+model TM_REGCM {
+  RGCM_REG Int      @id @map("rgcm_reg")
+  RGCM_TAG String?  @map("rgcm_tag") @db.VarChar(200)
+  RGCM_DES String?  @map("rgcm_des")
+  RGCM_HIS String?  @map("rgcm_his")
+  RGCM_COS String?  @map("rgcm_cos")
+  RGCM_CLI String?  @map("rgcm_cli")
+  RGCM_IMG String?  @map("rgcm_img") @db.VarChar(500)
+  RGCM_COL String?  @map("rgcm_col") @db.VarChar(20)
+
+  TM_REGION TM_REGION @relation(fields: [RGCM_REG], references: [REGI_COD], onDelete: Cascade, onUpdate: NoAction)
+
+  @@map("tm_regcm")
 }

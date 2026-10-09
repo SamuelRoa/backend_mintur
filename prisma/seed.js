@@ -5,7 +5,7 @@ require("dotenv").config({ path: require("path").join(__dirname, "..", ".env") }
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log("🌱 Iniciando seed...");
+  console.log("Iniciando seed...");
 
   // Limpiar datos existentes en orden de dependencias
   console.log("  Limpiando datos existentes...");

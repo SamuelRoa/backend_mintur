@@ -23,8 +23,9 @@ const connectWithRetry = async (retries = MAX_RETRIES) => {
       console.log('✅ Conexión a la base de datos establecida');
       return;
     } catch (err) {
+      console.warn(`⚠️  Intento ${attempt}/${retries} falló: ${err.message}`);
       if (attempt === retries) throw err;
-      console.warn(`⚠️  Intento ${attempt}/${retries} falló. Reintentando en ${RETRY_DELAY / 1000}s...`);
+      console.warn(`   Reintentando en ${RETRY_DELAY / 1000}s...`);
       await new Promise((resolve) => setTimeout(resolve, RETRY_DELAY));
     }
   }

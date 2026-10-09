@@ -21,6 +21,7 @@ const prestadoresRoutes = require('./routes/prestadores.routes');
 const usuariosRoutes = require('./routes/usuarios.routes');
 const geoRoutes = require('./routes/geo.routes');
 const interaccionRoutes = require('./routes/interaccion.routes');
+const cmsRoutes = require('./routes/cms.routes');
 
 const app = express();
 
@@ -79,6 +80,7 @@ app.use(`${API}/prestadores`, prestadoresRoutes);
 app.use(`${API}/usuarios`, usuariosRoutes);
 app.use(`${API}/geo`, geoRoutes);
 app.use(API, interaccionRoutes);
+app.use(API, cmsRoutes);
 
 // 404 para rutas no encontradas
 app.use((req, res) => {

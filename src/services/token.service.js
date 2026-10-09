@@ -58,6 +58,7 @@ const generateTokenPair = (user) => {
     email: user.USUAR_EM,
     nombre: user.USUAR_NM,
     rol: user.USUAR_RO,
+    rolNombre: user.TM_ROLES?.ROLE_NOM ?? user.rolNombre ?? null,
   };
 
   return {

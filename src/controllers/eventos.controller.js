@@ -9,11 +9,12 @@ const { success, created, notFound } = require('../utils/response.util');
 const getEventos = async (req, res, next) => {
   try {
     const { skip, take, page, limit } = getPaginationParams(req.query);
-    const { tipoEvento, destinoId, proximosOnly, regionId } = req.query;
+    const { tipoEvento, destinoId, proximosOnly, regionId, destacado } = req.query;
 
     const where = {};
     if (tipoEvento) where.EVEN_TE = parseInt(tipoEvento);
     if (destinoId) where.EVEN_DI = parseInt(destinoId);
+    if (destacado === 'true') where.EVEN_FAV = true;
     if (proximosOnly === 'true') where.EVEN_FI = { gte: new Date() };
     if (regionId) {
       where.TM_DESTI = {
@@ -67,7 +68,7 @@ const getEventoById = async (req, res, next) => {
 
 const createEvento = async (req, res, next) => {
   try {
-    const { nombre, descripcion, fechaInicio, fechaFin, tipoEventoId, destinoId } = req.body;
+    const { nombre, descripcion, fechaInicio, fechaFin, tipoEventoId, destinoId, imagenUrl, destacado, orden } = req.body;
     const evento = await prisma.tM_EVENT.create({
       data: {
         EVEN_NOM: nombre,
@@ -76,6 +77,9 @@ const createEvento = async (req, res, next) => {
         EVEN_FF: fechaFin ? new Date(fechaFin) : null,
         EVEN_TE: tipoEventoId,
         EVEN_DI: destinoId,
+        EVEN_IMG: imagenUrl ?? undefined,
+        EVEN_FAV: destacado ?? undefined,
+        EVEN_ORD: orden ?? undefined,
       },
     });
     return created(res, evento, 'Evento creado exitosamente');
@@ -85,7 +89,7 @@ const createEvento = async (req, res, next) => {
 const updateEvento = async (req, res, next) => {
   try {
     const id = parseInt(req.params.id);
-    const { nombre, descripcion, fechaInicio, fechaFin, tipoEventoId, destinoId } = req.body;
+    const { nombre, descripcion, fechaInicio, fechaFin, tipoEventoId, destinoId, imagenUrl, destacado, orden } = req.body;
 
     const data = {};
     if (nombre) data.EVEN_NOM = nombre;
@@ -94,6 +98,9 @@ const updateEvento = async (req, res, next) => {
     if (fechaFin !== undefined) data.EVEN_FF = fechaFin ? new Date(fechaFin) : null;
     if (tipoEventoId) data.EVEN_TE = tipoEventoId;
     if (destinoId) data.EVEN_DI = destinoId;
+    if (imagenUrl !== undefined) data.EVEN_IMG = imagenUrl;
+    if (destacado !== undefined) data.EVEN_FAV = destacado;
+    if (orden !== undefined) data.EVEN_ORD = orden;
 
     const evento = await prisma.tM_EVENT.update({ where: { EVEN_COD: id }, data });
     return success(res, evento, 'Evento actualizado exitosamente');

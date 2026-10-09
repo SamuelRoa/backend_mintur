@@ -14,12 +14,13 @@ const { success, created, notFound } = require('../utils/response.util');
 const getDestinos = async (req, res, next) => {
   try {
     const { skip, take, page, limit } = getPaginationParams(req.query);
-    const { municipio, tipoTurismo, nombre, regionId } = req.query;
+    const { municipio, tipoTurismo, nombre, regionId, destacado } = req.query;
 
     const where = {};
     if (municipio) where.DEST_MUN = parseInt(municipio);
     if (tipoTurismo) where.DEST_TTU = parseInt(tipoTurismo);
     if (nombre) where.DEST_NOM = { contains: nombre, mode: 'insensitive' };
+    if (destacado === 'true') where.DEST_FAV = true;
     if (regionId) {
       where.TM_MUNIC = {
         TM_ESTADO: { ESTA_REGI: parseInt(regionId) },
@@ -43,7 +44,7 @@ const getDestinos = async (req, res, next) => {
           },
           TM_UBDES: true,
         },
-        orderBy: { DEST_NOM: 'asc' },
+        orderBy: [{ DEST_FAV: 'desc' }, { DEST_ORD: 'asc' }, { DEST_NOM: 'asc' }],
       }),
     ]);
 
@@ -92,7 +93,7 @@ const getDestinoById = async (req, res, next) => {
  */
 const createDestino = async (req, res, next) => {
   try {
-    const { nombre, descripcion, vialidad, tipoTurismoId, municipioId, lat, lon, direccion } = req.body;
+    const { nombre, descripcion, vialidad, tipoTurismoId, municipioId, lat, lon, direccion, imagenUrl, destacado, orden } = req.body;
 
     const destino = await prisma.tM_DESTI.create({
       data: {
@@ -101,6 +102,9 @@ const createDestino = async (req, res, next) => {
         DEST_VIA: vialidad,
         DEST_TTU: tipoTurismoId,
         DEST_MUN: municipioId,
+        DEST_IMG: imagenUrl ?? undefined,
+        DEST_FAV: destacado ?? undefined,
+        DEST_ORD: orden ?? undefined,
         TM_UBDES: {
           create: {
             UBDE_LAT: lat,
@@ -125,7 +129,7 @@ const createDestino = async (req, res, next) => {
 const updateDestino = async (req, res, next) => {
   try {
     const id = parseInt(req.params.id);
-    const { nombre, descripcion, vialidad, tipoTurismoId, municipioId, lat, lon, direccion } = req.body;
+    const { nombre, descripcion, vialidad, tipoTurismoId, municipioId, lat, lon, direccion, imagenUrl, destacado, orden } = req.body;
 
     const data = {};
     if (nombre !== undefined) data.DEST_NOM = nombre;
@@ -133,6 +137,9 @@ const updateDestino = async (req, res, next) => {
     if (vialidad !== undefined) data.DEST_VIA = vialidad;
     if (tipoTurismoId !== undefined) data.DEST_TTU = tipoTurismoId;
     if (municipioId !== undefined) data.DEST_MUN = municipioId;
+    if (imagenUrl !== undefined) data.DEST_IMG = imagenUrl;
+    if (destacado !== undefined) data.DEST_FAV = destacado;
+    if (orden !== undefined) data.DEST_ORD = orden;
 
     // Actualizar ubicación si se proporcionan coordenadas
     if (lat !== undefined || lon !== undefined || direccion !== undefined) {

@@ -10,11 +10,12 @@ const { success, created, notFound } = require('../utils/response.util');
 const getRutas = async (req, res, next) => {
   try {
     const { skip, take, page, limit } = getPaginationParams(req.query);
-    const { tipoTurismo, nombre, regionId } = req.query;
+    const { tipoTurismo, nombre, regionId, destacado } = req.query;
 
     const where = {};
     if (tipoTurismo) where.RUTA_TTU = parseInt(tipoTurismo);
     if (nombre) where.RUTA_NOM = { contains: nombre, mode: 'insensitive' };
+    if (destacado === 'true') where.RUTA_FAV = true;
     if (regionId) {
       where.TR_RUTDE = {
         some: {
@@ -92,7 +93,7 @@ const getRutaById = async (req, res, next) => {
 
 const createRuta = async (req, res, next) => {
   try {
-    const { nombre, descripcion, duracionHoras, distanciaKm, vialidad, tipoTurismoId, destinos } = req.body;
+    const { nombre, descripcion, duracionHoras, distanciaKm, vialidad, tipoTurismoId, destinos, destacado, orden } = req.body;
 
     const ruta = await prisma.tM_RUTAT.create({
       data: {
@@ -102,6 +103,8 @@ const createRuta = async (req, res, next) => {
         RUTA_DIS: distanciaKm,
         RUTA_VIA: vialidad,
         RUTA_TTU: tipoTurismoId,
+        RUTA_FAV: destacado ?? undefined,
+        RUTA_ORD: orden ?? undefined,
         TR_RUTDE: destinos?.length
           ? {
               create: destinos.map((d, i) => ({
@@ -123,7 +126,7 @@ const createRuta = async (req, res, next) => {
 const updateRuta = async (req, res, next) => {
   try {
     const id = parseInt(req.params.id);
-    const { nombre, descripcion, duracionHoras, distanciaKm, vialidad, tipoTurismoId } = req.body;
+    const { nombre, descripcion, duracionHoras, distanciaKm, vialidad, tipoTurismoId, destacado, orden } = req.body;
 
     const data = {};
     if (nombre !== undefined) data.RUTA_NOM = nombre;
@@ -132,6 +135,8 @@ const updateRuta = async (req, res, next) => {
     if (distanciaKm !== undefined) data.RUTA_DIS = distanciaKm;
     if (vialidad !== undefined) data.RUTA_VIA = vialidad;
     if (tipoTurismoId !== undefined) data.RUTA_TTU = tipoTurismoId;
+    if (destacado !== undefined) data.RUTA_FAV = destacado;
+    if (orden !== undefined) data.RUTA_ORD = orden;
 
     const ruta = await prisma.tM_RUTAT.update({ where: { RUTA_COD: id }, data });
     return success(res, ruta, 'Ruta actualizada exitosamente');

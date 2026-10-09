@@ -35,6 +35,8 @@ jest.mock('../src/config/database', () => {
     tM_OPINI: mockModel(['findMany', 'create', 'delete', 'count']),
     tM_COINS: mockModel(['findMany', 'create', 'update', 'delete', 'count']),
     tM_COTUR: mockModel(['findMany', 'create', 'update', 'delete', 'count']),
+    tM_SITE: mockModel(['findMany', 'upsert']),
+    tM_REGCM: mockModel(['findUnique', 'upsert']),
     tR_USU_REGI: mockModel(['findMany']),
     $connect: jest.fn(),
     $disconnect: jest.fn(),

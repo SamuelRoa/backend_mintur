@@ -20,14 +20,25 @@ const { forbidden } = require('../utils/response.util');
  * // Usando nombres de rol
  * router.get('/admin', authenticate, requireRoleName('Administrador', 'SuperAdmin'), handler)
  */
+/**
+ * Roles canónicos del sistema (por nombre — estable frente a autoincrement).
+ * IDs legacy 55/59 se siguen aceptando por compatibilidad con tokens viejos.
+ */
+const ROLE_ADMIN = 'Administrador';
+const ROLE_GESTOR = 'Gestor Turístico';
+const LEGACY_IDS = { 55: ROLE_ADMIN, 59: ROLE_GESTOR };
+
 const requireRole = (...roles) => {
   return (req, res, next) => {
     if (!req.user) {
       return forbidden(res, 'No se encontró información de usuario en el token');
     }
 
-    const userRol = req.user.rol;
-    const hasPermission = roles.includes(userRol);
+    const userRolId = req.user.rol;
+    const userRolNombre = req.user.rolNombre ?? LEGACY_IDS[userRolId] ?? null;
+    const hasPermission =
+      roles.includes(userRolId) ||
+      (userRolNombre && roles.includes(userRolNombre));
 
     if (!hasPermission) {
       return forbidden(res, 'No tienes permisos para acceder a este recurso');
@@ -37,4 +48,4 @@ const requireRole = (...roles) => {
   };
 };
 
-module.exports = { requireRole };
+module.exports = { requireRole, ROLE_ADMIN, ROLE_GESTOR };

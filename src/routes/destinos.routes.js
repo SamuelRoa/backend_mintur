@@ -1,6 +1,8 @@
 const { Router } = require('express');
 const { authenticate } = require('../middleware/auth.middleware');
-const { requireRole } = require('../middleware/role.middleware');
+const { requireRole, ROLE_ADMIN, ROLE_GESTOR } = require('../middleware/role.middleware');
+const { validate } = require('../middleware/zod.middleware');
+const { destinoSchema } = require('../schemas/entidades.schema');
 const {
   getDestinos, getDestinoById, createDestino,
   updateDestino, deleteDestino, exportarDestinos,
@@ -8,11 +10,11 @@ const {
 
 const router = Router();
 
-router.get('/exportar', authenticate, requireRole(55, 59), exportarDestinos);
+router.get('/exportar', authenticate, requireRole(ROLE_ADMIN, ROLE_GESTOR), exportarDestinos);
 router.get('/', getDestinos);
 router.get('/:id', getDestinoById);
-router.post('/', authenticate, requireRole(55, 59), createDestino);
-router.put('/:id', authenticate, requireRole(55, 59), updateDestino);
-router.delete('/:id', authenticate, requireRole(55, 59), deleteDestino);
+router.post('/', authenticate, requireRole(ROLE_ADMIN, ROLE_GESTOR), validate(destinoSchema), createDestino);
+router.put('/:id', authenticate, requireRole(ROLE_ADMIN, ROLE_GESTOR), validate(destinoSchema.partial()), updateDestino);
+router.delete('/:id', authenticate, requireRole(ROLE_ADMIN, ROLE_GESTOR), deleteDestino);
 
 module.exports = router;

@@ -35,7 +35,9 @@ const startServer = async () => {
       console.log(`🔌 WebSocket habilitado para notificaciones en tiempo real`);
     });
   } catch (error) {
-    console.error('❌ Error al iniciar el servidor:', error);
+    console.error('❌ Error al iniciar el servidor:', error.message);
+    console.error('   → Verifica DATABASE_URL/DIRECT_URL en .env y que el proyecto Neon esté activo (no pausado/eliminado).');
+    console.error('   → Neon free tier se suspende por inactividad: entra al dashboard Neon y reactiva la rama.');
     await prisma.$disconnect();
     process.exit(1);
   }

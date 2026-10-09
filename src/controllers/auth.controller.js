@@ -136,6 +136,7 @@ const refreshToken = async (req, res, next) => {
 
     const user = await prisma.tM_USUAR.findUnique({
       where: { USUA_COD: decoded.sub },
+      include: { TM_ROLES: true },
     });
 
     if (!user || !user.USUAR_AC) {
